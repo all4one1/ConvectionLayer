@@ -119,8 +119,8 @@ void init_fields(Configuration& c, Arrays& h)
 
 				//if (y > 0.5) h.C[q] += 0.5;
 				//else h.C[q] += -0.5;
-				//h.ksi[q] = (1e-6) * sin(2 * PI * x / c.Lx) * sin(PI * y);
-				h.C0[q] = h.C[q] = (1e-5) * sin(2 * PI * x / c.Lx) * (1 - y) * c.psi;
+				h.ksi[q] = (1e-6) * sin(2 * PI * x / c.Lx) * sin(PI * y);
+				//h.C0[q] = h.C[q] = (1e-5) * sin(2 * PI * x / c.Lx) * (1 - y) * c.psi;
 			}
 		}
 	//}

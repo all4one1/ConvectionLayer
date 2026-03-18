@@ -5,21 +5,19 @@ tau = 0.0005
 
 Lx = 5
 Ly = 1
-alpha = 90
+alpha = 0
 xbc = 1   ! 1 is for periodic bc, 0 is for rigid walls
 
 Pr = 10
-Sc = 1000
-psi = 0.2
-Ra = 3000
-
+Ra = 5000
+call_max = 1000
 
 increment = -50
 
 continue = 0
 
 time_limit = 100000
-time_minimal = 200000
+time_minimal = 10
 
 
 cpu = 1

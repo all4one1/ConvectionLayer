@@ -179,8 +179,8 @@ namespace stream_cpu
                 (dx1(l, ksi) * dy1(l, omega) - dy1(l, ksi) * dx1(l, omega)) //nonlinear term
                 + (dx2(l, omega) + dy2(l, omega))
 
-                + config.grav_y * config.Ra / config.Pr * (dx1(l, T)) * T[l]
-                - config.grav_x * config.Ra / config.Pr * (dy1(l, T)) * T[l]
+                + config.grav_y * config.Ra / config.Pr * (dx1(l, T)) //* T[l]
+                - config.grav_x * config.Ra / config.Pr * (dy1(l, T)) //* T[l]
                 );
         };
 
@@ -231,7 +231,6 @@ namespace stream_cpu
             }
         }
     }
-
 
     void poisson_stream(double* ksi_new, double* ksi, double* omega)
     {

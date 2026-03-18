@@ -719,7 +719,7 @@ void Nu_y_for_fixed_flux(Configuration &c, double *f, double &Nu_) {
 	double s_top = 0, s_bottom = 0;
 	for (unsigned int i = 1; i <= c.nx - 1; i++)
 	{
-		l = i + c.offset * (c.ny - 1);
+		l = i + c.offset * (c.ny);
 		s_top += f[l];
 		
 		l = i;
