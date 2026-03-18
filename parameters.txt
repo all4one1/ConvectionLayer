@@ -1,0 +1,26 @@
+nx = 20
+ny = 20
+tau = 0.0005
+
+
+Lx = 5
+Ly = 1
+alpha = 90
+xbc = 1   ! 1 is for periodic bc, 0 is for rigid walls
+
+Pr = 10
+Sc = 1000
+psi = 0.2
+Ra = 3000
+
+
+increment = -50
+
+continue = 0
+
+time_limit = 100000
+time_minimal = 200000
+
+
+cpu = 1
+note = cpu1
