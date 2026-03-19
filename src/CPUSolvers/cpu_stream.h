@@ -36,10 +36,10 @@ namespace stream_cpu
         return  0.5 * (3.0 * f[l] - 4.0 * f[l - 1] + f[l - 2]) / config.hx;
     }
     double dy1_up(unsigned int l, double *f) {
-        return  -0.5 * (3.0 * f[l] - 4.0 * f[l + config.offset] + f[l + 2 * config.offset]) / config.hx;
+        return  -0.5 * (3.0 * f[l] - 4.0 * f[l + config.offset] + f[l + 2 * config.offset]) / config.hy;
     }
     double dy1_down(unsigned int l, double *f) {
-        return  0.5 * (3.0 * f[l] - 4.0 * f[l - config.offset] + f[l - 2 * config.offset]) / config.hx;
+        return  0.5 * (3.0 * f[l] - 4.0 * f[l - config.offset] + f[l - 2 * config.offset]) / config.hy;
     }
 
 
@@ -179,8 +179,8 @@ namespace stream_cpu
                 (dx1(l, ksi) * dy1(l, omega) - dy1(l, ksi) * dx1(l, omega)) //nonlinear term
                 + (dx2(l, omega) + dy2(l, omega))
 
-                + config.grav_y * config.Ra / config.Pr * (dx1(l, T)) //* T[l]
-                - config.grav_x * config.Ra / config.Pr * (dy1(l, T)) //* T[l]
+                + config.grav_y * config.Ra / config.Pr * (dx1(l, T)) * T[l]
+                - config.grav_x * config.Ra / config.Pr * (dy1(l, T)) * T[l]
                 );
         };
 

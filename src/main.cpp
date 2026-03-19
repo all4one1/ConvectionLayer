@@ -121,26 +121,25 @@ reset: //we go here when a steady state has been reached and we start with a new
 		{
 
 			//compute statistics
-			Nu_y_for_fixed_flux(config, array.T, stat.Nu);
 			stat.ksi_max = absmax(array.ksi, N);
 			stat.ksi_sum = sum_abs(array.ksi, N);
 			stat.omega_sum = sum_abs(array.omega, N);
-			stat.C_sum_signed = sum_signed(array.C, N);
+
 			check_ksi.update();
 			check_omega.update();
 			stream_cpu::transform_to_velocity(config, array.ksi, array.vx, array.vy);
 			velocity_stats(config, array.vx, array.vy, stat);
-
+			temperature_stats(config, array.T, array.vy, stat);
 			//print on screen
-			cout << endl << "Ra = " << config.Ra << ", t= " << run.timeq << ", " << run.iter << endl;
-			cout << "ksi= " << stat.ksi_max << ", Vmax= " << stat.Vmax << ", Nu=" << stat.Nu << endl;
+			cout << endl << "Ra = " << config.Ra << ", t= " << run.timeq << ", iter= " << run.iter << endl;
+			cout << "ksi= " << stat.ksi_max << ", Vmax= " << stat.Vmax << ", Nu= " << stat.Nu << endl;
 			if (!run.note.empty()) cout << "note: " << run.note << endl;
 
 			// write to time-dependent values in file
-			if (run.iter == 1) w_temporal << "t, time(sec), time(sec)v2, max_ksi, omega_sum, ksi_point, T_point, Vmax, Ek, Nu" << " Ra=" << config.Ra << endl;
+			if (run.iter == 1) w_temporal << "t, time(sec), time(sec)v2, max_ksi, omega_sum, ksi_point, T_point, Vmax, Ek, Nu, Nu2, Nu3, TsumAbs, TsumSign" << " Ra=" << config.Ra << endl;
 			w_temporal << run.timeq << " " << ftimer.update_and_get("main") << " " << ftimer.get("calc")
 				<< " " << stat.ksi_max << " " << stat.omega_sum << " " << array.ksi[INDEX(10, 10, 0)] << " " << array.T[INDEX(10, 10, 0)] 
-				<< " " << stat.Vmax << " " << stat.Ek << " " << stat.Nu
+				<< " " << stat.Vmax << " " << stat.Ek << " " << stat.Nu << " " << stat.Nu2 << " " << stat.Nu3 << " " << stat.T_sum_abs << " " << stat.T_sum_signed
 				<< endl;
 
 			// check if steady state
@@ -170,11 +169,12 @@ reset: //we go here when a steady state has been reached and we start with a new
 		//write final state when a steady state has been reached
 		if (run.stop_signal > 0)
 		{
-			if (run.call_i == 0)	w_final << "Ra, ksi_max, ksi_max2, omega_sum, Vmax, Ek, time(sec), t, Nu" << endl;
+			if (run.call_i == 0)	w_final << "Ra, ksi_max, ksi_max2, omega_sum, Vmax, Ek, time(sec), t, Nu, Nu2, Nu3, TsumAbs, TsumSign" << endl;
 
 			w_final << config.Ra << " " << stat.ksi_max << " " << pow(stat.ksi_max, 2) << " " << stat.omega_sum << " " << stat.Vmax << " " << stat.Ek
 				<< " " << ftimer.update_and_get("main") << " " << run.timeq
-				<< " " << stat.Nu
+				<< " " << stat.Nu << " " << stat.Nu2 << " " << stat.Nu3
+				<< " " << stat.T_sum_abs << " " << stat.T_sum_signed
 				<< endl;
 			backup.save(run.iter, run.timeq, run.call_i, config,	{ array.ksi, array.omega, array.T, array.C },	"ksi, omega, T, C");
 			

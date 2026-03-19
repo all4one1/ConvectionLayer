@@ -24,7 +24,7 @@ struct Configuration
 	double grav_x, grav_y, grav_z;
 	double density_x, density_y, density_z;
 	double Sc, psi, Sc11, Sc12, Sc21, Sc22, psi1, psi2, psiS, Q, Ra, Rad, Rav, K, Pr, Le;
-	double Re, Pe, M, A, Ca, Gr;
+	double Re, Pe, M, A, Ca, Gr, yi;
 	double incr_parameter;
 	unsigned int dim, nx, ny, nz, N, offset, offset2, Nbytes;
 	unsigned int heatflux;
@@ -40,8 +40,9 @@ struct PhysicalValues
 
 struct StatValues 
 {
-	double ksi_max = 0, ksi_sum = 0, omega_max = 0, omega_sum = 0, C_sum = 0, C_sum_signed = 0;
-	double NuTop = 0, NuDown = 0, ShrTop = 0, ShrDown = 0, Nu = 0;
+	double ksi_max = 0, ksi_sum = 0, omega_max = 0, omega_sum = 0;
+	double ShrTop = 0, ShrDown = 0, C_sum = 0, C_sum_signed = 0;
+	double NuTop = 0, NuDown = 0, Nu = 0, Nu2 = 0, Nu3 = 0, T_sum_abs = 0, T_sum_signed = 0;
 	double Vmax = 0, Vx = 0, Vy = 0, Ek = 0;
 	double Cu = 0, Pe = 0;
 };

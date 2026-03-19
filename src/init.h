@@ -27,6 +27,7 @@ void init_parameters(Configuration& c)
 	c.ny = (unsigned int)c.Ly * c.ny;
 	c.nz = (unsigned int)c.Ly * c.nz;
 	par.reading<double>(c.alpha, "alpha", 0);
+	par.reading<double>(c.yi, "yi", 0);
 	par.reading<double>(c.Ra, "Ra", 5000);
 	par.reading<double>(c.Rad, "Rad", 5000);
 	par.reading<double>(c.Pr, "Pr", 10);
@@ -114,8 +115,8 @@ void init_fields(Configuration& c, Arrays& h)
 				unsigned int q = i + config.offset * j;
 				double y = c.hy * j;
 				double x = c.hx * i;
-				h.C[q] = 0; // 1 - y;
-				h.T[q] = 0; // 1 - y;
+
+				h.T[q] = h.T0[q] = c.yi - y;
 
 				//if (y > 0.5) h.C[q] += 0.5;
 				//else h.C[q] += -0.5;

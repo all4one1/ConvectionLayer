@@ -8,16 +8,17 @@ Ly = 1
 alpha = 0
 xbc = 1   ! 1 is for periodic bc, 0 is for rigid walls
 
+yi = 0.5
 Pr = 10
-Ra = 5000
+Ra = 30000
 call_max = 1000
 
-increment = -50
+increment = -1000
 
 continue = 0
 
-time_limit = 100000
-time_minimal = 10
+time_limit = 200000
+time_minimal = 10000
 
 
 cpu = 1

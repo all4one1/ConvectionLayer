@@ -673,6 +673,60 @@ void velocity_stats(Configuration &c, double *vx, double *vy, StatValues &stat) 
 	stat.Pe = *(std::max_element(Pe.begin(), Pe.end()));
 }
 
+void temperature_stats(Configuration &c, double *T, double *vy, StatValues &stat)
+{
+	stat.T_sum_abs = stat.T_sum_signed = 0.0;
+	stat.Nu = stat.Nu2 = stat.Nu3 = 0.0;
+
+	auto dy1 = [&c](unsigned int l, double *f) {
+		return (f[l + c.offset] - f[l - c.offset]) / (2.0 * c.hy);
+	};
+	auto dy1_up = [&c](unsigned int l, double *f) {
+		return  -0.5 * (3.0 * f[l] - 4.0 * f[l + c.offset] + f[l + 2 * c.offset]) / c.hy;
+	};
+	auto dy1_down = [&c](unsigned int l, double *f) {
+		return  0.5 * (3.0 * f[l] - 4.0 * f[l - c.offset] + f[l - 2 * c.offset]) / c.hy;
+	};
+
+	double s_top = 0, s_bottom = 0;
+	double TW = 0;
+	double dTz = 0;
+	unsigned int l = 0;
+
+	unsigned int first = 1;
+	unsigned int last = c.nx - 1;
+	double A = c.hx * (last - first);
+
+	for (unsigned int j = 0; j <= c.ny; j++) {
+		for (unsigned int i = first; i <= last; i++) {
+			l = i + c.offset * j;
+
+			stat.T_sum_signed += T[l];
+			stat.T_sum_abs += abs(T[l]);
+
+			TW += vy[l] * T[l] * c.dV; 
+			
+			if (j == 0)			dTz += dy1_up(l, T) * c.dV;
+			else if (j == c.ny)	dTz += dy1_down(l, T) * c.dV;
+			else				dTz += dy1(l, T) * c.dV;
+			 
+
+			if (j == 0)		s_bottom += T[l];
+			if (j == c.ny)	s_top += T[l];
+		}
+	}
+
+	s_top = s_top / (last - first + 1);
+	s_bottom = s_bottom / (last - first + 1);
+
+	stat.Nu = 1.0 / (s_bottom - s_top);
+	stat.Nu2 = 1.0 + c.Pr * (TW / (A)) / (s_bottom - s_top);
+	stat.Nu3 = (-dTz / c.Pr + TW) / (-dTz / c.Pr);
+
+	stat.T_sum_signed = stat.T_sum_signed * c.dV / A * c.Ly;
+	stat.T_sum_abs = stat.T_sum_abs * c.dV / A * c.Ly;
+}
+
 void make_full(Configuration &c, double* full, double* add)
 {
 	for (unsigned int j = 0; j <= c.ny; j++) {
